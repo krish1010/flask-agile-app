@@ -43,12 +43,17 @@ def login():
     else:
         username = request.form.get('username')
         password = request.form.get('psw')
-        user = get_user(username, password)
-        if user:
-            session['user_idx'] = user.idx
-            session['username'] = user.username
-            return redirect(url_for(TASKS_INDEX))
-        else:
+        try:
+            user = get_user(username, password)
+            if user:
+                session['user_idx'] = user.idx
+                session['username'] = user.username
+                return redirect(url_for(TASKS_INDEX))
+            else:
+                flash('Wrong username or password')
+                return redirect(url_for(USERS_LOGIN))
+        except AttributeError:
+            flash('Wrong username or password')
             return redirect(url_for(USERS_LOGIN))
 
 
