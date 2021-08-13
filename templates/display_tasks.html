@@ -16,6 +16,11 @@
     </form>
     <br>
 {% endif %}
+<form action="{{ url_for('users.logout') }}" method="post">
+    <button type="submit">Logout</button>
+</form>
+<br>
+<br>
 {% for task in all_tasks %}
 
     <label for="title"><strong>Title:</strong></label>

@@ -17,9 +17,9 @@
 
     <label for="account-type"><strong>Account Type</strong></label>
     <br>
-    <input type="radio" id="manager" name="manager" value="manager">
+    <input type="radio" id="manager" name="user-type" value="manager" required>
     <label for="manager">Manager</label><br>
-    <input type="radio" id="developer" name="developer" value="developer">
+    <input type="radio" id="developer" name="user-type" value="developer">
     <label for="developer">Developer</label><br>
 
 
@@ -35,9 +35,18 @@
     <button type="submit" class="registerbtn">Register</button>
 
     <div class="container signin">
-        <p>Already have an account? <a href="#">Sign in</a>.</p>
+        <p>Already have an account? <a href="{{ url_for('users.login') }}">Sign in</a>.</p>
     </div>
 </form>
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul class=flashes>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
 </body>
 </html>
 
