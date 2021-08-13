@@ -36,6 +36,10 @@
 
     {{ task.status.value }}
     <br>
+    {% if task.status.value == 'subscribed' %}
+        <label for="task-assigner"><strong>Assigned to:</strong></label>
+        {{ task.user.username }}<br>
+    {% endif %}
     <label for="taken-on"><strong>Taken on:</strong></label>
     {{ task.taken_on }}
     <br>
@@ -50,11 +54,11 @@
 
     <br>
     {% if session.user_type == 'manager' %}
-    <button type="button" onclick="window.location.href='{{ url_for('tasks.delete', idx=task.idx) }}'"
-            value="Delete">Delete
-    </button>
-    <br>
-{% endif %}
+        <button type="button" onclick="window.location.href='{{ url_for('tasks.delete', idx=task.idx) }}'"
+                value="Delete">Delete
+        </button>
+        <br>
+    {% endif %}
     <br>
     <br>
 

@@ -22,13 +22,13 @@
         <textarea id="description" name="description"  rows="4" cols="50">{% if task %}{{ task.title }}{% endif %}</textarea>
         <br>
         <label for="start"><strong>Start date:</strong></label>
-        <input type="date" id="taken-on" name="taken-on" required>
+        <input type="date" id="taken-on" name="taken-on" value="{% if task %}{{ task.completed_on.strftime('%Y-%m-%d') }}{% endif %}" required>
 
         <br>
         <br>
         <label for="start"><strong>End date:</strong></label>
 
-        <input type="date" id="completed-on" name="completed-on" required>
+        <input type="date" id="completed-on" name="completed-on" value="{% if task %}{{ task.completed_on.strftime('%Y-%m-%d') }}{% endif %}" required>
 
         <br>
     {% endif %}
