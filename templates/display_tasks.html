@@ -49,6 +49,12 @@
     <br>
 
     <br>
+    {% if session.user_type == 'manager' %}
+    <button type="button" onclick="window.location.href='{{ url_for('tasks.delete', idx=task.idx) }}'"
+            value="Delete">Delete
+    </button>
+    <br>
+{% endif %}
     <br>
     <br>
 
