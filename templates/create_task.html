@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create task</title>
+</head>
+<body>
+<form action="{{ url_for(source, idx=idx) }}" method="post">
+    <class name="container">
+        {% if source == 'tasks.update' %}
+            <h1>Update task</h1>
+        {% else %}
+            <h1>Add task</h1>
+        {% endif %}
+        <hr>
+        <label for="title"><strong>Title:</strong></label>
+        <input type="text" placeholder="Enter Title" name="title" id="title" required>
+        <br>
+        <label for="description"><strong>Description:</strong></label>
+
+        <textarea id="description" name="description" rows="4" cols="50">
+</textarea>
+        <br>
+        <label for="start"><strong>Start date:</strong></label>
+        <input type="date" id="taken-on" name="taken-on" required>
+
+        <br>
+        <br>
+        <label for="start"><strong>End date:</strong></label>
+
+        <input type="date" id="completed-on" name="completed-on" required>
+
+        <br>
+
+        <hr>
+        {% if source == 'tasks.update' %}
+            <button type="submit" class="registerbtn">Update</button>
+        {% else %}
+            <button type="submit" class="registerbtn">Add</button>
+        {% endif %}
+        </div>
+</form>
+<button onclick="{{ url_for('tasks.index') }}">All Tasks</button>
+</body>
+</html>

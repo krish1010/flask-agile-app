@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tasks</title>
+</head>
+<body>
+{% if session.username %}
+    Hi, {{ session.username }}
+{% endif %}
+<br>
+<br>
+{% if session.user_type == 'manager' %}
+    <form action="{{ url_for('tasks.create') }}">
+        <button type="submit">Create</button>
+    </form>
+    <br>
+{% endif %}
+{% for task in all_tasks %}
+
+    <label for="title"><strong>Title:</strong></label>
+    <span>{{ task.title }}</span>
+    <br>
+    <label for="description"><strong>Description:</strong></label>
+    <span>{{ task.description }}</span>
+    <br>
+    <label for="created-at"><strong>Created at:</strong></label>
+    {{ task.created_at }}
+
+    <br><label for="status-l"><strong>Status:</strong></label>
+
+    {{ task.status.value }}
+    <br>
+    <label for="cars"><strong>Change Status:</strong></label>
+
+    <select name="status">
+        <option value="SUBSCRIBE">Subscribe</option>
+        <option value="COMPLETED">Completed</option>
+        {% if session.user_type == 'manager' %}
+            <option value="OPEN">Open</option>
+            <option value="APPROVED">Approved</option>
+        {% endif %}
+    </select>
+    <br>
+    {% if session.user_type == 'manager' %}
+        <button type="button" onclick="window.location.href='{{ url_for('tasks.update', idx=task.idx) }}'"
+                value="Update">Update
+        </button>
+        <br>
+    {% endif %}
+    <br>
+    <br>
+    <br>
+
+{% endfor %}
+</body>
+</html>
