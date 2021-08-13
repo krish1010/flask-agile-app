@@ -53,10 +53,12 @@ def update(idx):
                             completed_on=completed_on, status=status)
             else:
                 status = request.form.get('status')
+
                 if status == 'subscribed':
-                    employee_id = session.get('user_id')
-                    task.update(status=TaskStatus(status), employee_id=employee_id)
-                task.update(status=TaskStatus(status))
+                    employee_id = session.get('user_idx')
+                    task.update(status=TaskStatus(status), user_id=employee_id)
+                else:
+                    task.update(status=TaskStatus(status))
             return redirect(url_for('tasks.index'))
         else:
             ...
