@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, redirect, url_for
 from database.db import db
 
 from blueprints.users import USERS_BLUEPRINT
@@ -19,7 +19,7 @@ def create_tables():
 
 @app.route('/')
 def hello_world():  # put application's code here
-    return 'Hello World!'
+    return redirect(url_for('users.register_user'))
 
 
 if __name__ == '__main__':
