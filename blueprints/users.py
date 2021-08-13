@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, session, redirect, url_for
+from flask import Blueprint, request, render_template, session, redirect, url_for, flash
 
 from managers.users import create_user, get_user
 
@@ -18,16 +18,19 @@ def register_user():
         return render_template('register.html')
     else:
         username = request.form.get('username')
-        user_type = request.form.get('manager') or request.form.get('developer')
+        user_type = request.form.get('user-type')
         password = request.form.get('psw')
-        _ = request.form.get('psw-repeat')
-        print(username, password, user_type)
-        create_user(username, password, user_type=user_type)
-        user = get_user(username, password)
-        session['user_idx'] = user.idx
-        session['username'] = user.username
-        session['user_type'] = user.user_type.value
-        return redirect(url_for(TASKS_INDEX))
+        password_repeat = request.form.get('psw-repeat')
+        if password == password_repeat:
+            create_user(username, password, user_type=user_type)
+            user = get_user(username, password)
+            session['user_idx'] = user.idx
+            session['username'] = user.username
+            session['user_type'] = user.user_type.value
+            return redirect(url_for(TASKS_INDEX))
+        else:
+            flash('Wrong')
+            return redirect(url_for('users.register_user'))
 
 
 @USERS_BLUEPRINT.route('/login', methods=['GET', 'POST'])
@@ -49,7 +52,7 @@ def login():
             return redirect(url_for(USERS_LOGIN))
 
 
-@USERS_BLUEPRINT.route('/logout')
+@USERS_BLUEPRINT.route('/logout', methods=['POST'])
 def logout():
     try:
         if 'user_type' in session:
