@@ -22,14 +22,18 @@ def register_user():
         password = request.form.get('psw')
         password_repeat = request.form.get('psw-repeat')
         if password == password_repeat:
-            create_user(username, password, user_type=user_type)
+            try:
+                create_user(username, password, user_type=user_type)
+            except Exception:
+                flash('Username already exists, please try with a different one')
+                return redirect(url_for('users.register_user'))
             user = get_user(username, password)
             session['user_idx'] = user.idx
             session['username'] = user.username
             session['user_type'] = user.user_type.value
             return redirect(url_for(TASKS_INDEX))
         else:
-            flash('Wrong')
+            flash('Passwords do not match')
             return redirect(url_for('users.register_user'))
 
 
@@ -48,6 +52,7 @@ def login():
             if user:
                 session['user_idx'] = user.idx
                 session['username'] = user.username
+                session['user_type'] = user.user_type.value
                 return redirect(url_for(TASKS_INDEX))
             else:
                 flash('Wrong username or password')
