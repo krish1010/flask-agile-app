@@ -49,11 +49,14 @@ def update(idx):
                 taken_on = request.form.get('taken-on')
                 completed_on = request.form.get('completed-on')
                 status = request.form.get('status')
+                if status == 'subscribed':
+                    employee_id = session.get('user_idx')
+                    task.update(status=TaskStatus(status), user_id=employee_id)
+
                 update_task(task=task, title=title, description=description, taken_on=taken_on,
                             completed_on=completed_on, status=status)
             else:
                 status = request.form.get('status')
-
                 if status == 'subscribed':
                     employee_id = session.get('user_idx')
                     task.update(status=TaskStatus(status), user_id=employee_id)
