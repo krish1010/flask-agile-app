@@ -22,6 +22,7 @@
     <button type="submit" class="registerbtn">Login</button>
     </div>
 </form>
+<button><a href="{{ url_for('users.register_user') }}">Register</a></button>
 {% with messages = get_flashed_messages() %}
     {% if messages %}
         <ul class=flashes>
