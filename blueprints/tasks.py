@@ -1,5 +1,5 @@
 from flask import Blueprint, request, render_template, session, redirect, url_for
-
+from database.models.enums.task_status import TaskStatus
 from managers.tasks import create_task, get_all_tasks, get_task_by_id, update_task
 
 TASKS_BLUEPRINT = Blueprint('tasks', __name__)
@@ -43,11 +43,16 @@ def update(idx):
         return render_template(CREATE_TASK, **{'source': 'tasks.update', 'idx': idx})
     if request.method == 'POST':
         if task:
-            title = request.form.get('title')
-            description = request.form.get('description')
-            taken_on = request.form.get('taken-on')
-            completed_on = request.form.get('completed-on')
-            update_task(task=task, title=title, description=description, taken_on=taken_on, completed_on=completed_on)
+            if session.get('user_type') == 'manager':
+                title = request.form.get('title')
+                description = request.form.get('description')
+                taken_on = request.form.get('taken-on')
+                completed_on = request.form.get('completed-on')
+                status = request.form.get('status')
+                update_task(task=task, title=title, description=description, taken_on=taken_on, completed_on=completed_on, status=status)
+            else:
+                status = request.form.get('status')
+                task.update(status=TaskStatus(status))
             return redirect(url_for('tasks.index'))
         else:
             ...
