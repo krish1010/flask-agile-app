@@ -1,4 +1,5 @@
 from database.models.tables.tasks import Task
+from database.models.enums.task_status import TaskStatus
 from uuid import uuid4
 from datetime import datetime
 
@@ -21,9 +22,9 @@ def get_task_by_id(idx):
     return Task.get_by_uid(idx=idx)
 
 
-def update_task(task, title, description, taken_on, completed_on):
+def update_task(task, title, description, taken_on, completed_on, status):
     taken_on_f = datetime.strptime(taken_on, DATE_FORMAT)
     completed_on_f = datetime.strptime(completed_on, DATE_FORMAT)
 
     task.update(idx=str(uuid4()), title=title, description=description, taken_on=taken_on_f,
-                completed_on=completed_on_f)
+                completed_on=completed_on_f, status=TaskStatus(status))
