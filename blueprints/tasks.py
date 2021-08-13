@@ -40,7 +40,7 @@ def create():
 def update(idx):
     task = get_task_by_id(idx)
     if request.method == 'GET':
-        return render_template(CREATE_TASK, **{'source': 'tasks.update', 'idx': idx})
+        return render_template(CREATE_TASK, **{'source': 'tasks.update', 'idx': idx, 'task': task})
     if request.method == 'POST':
         if task:
             if session.get('user_type') == 'manager':
@@ -49,10 +49,18 @@ def update(idx):
                 taken_on = request.form.get('taken-on')
                 completed_on = request.form.get('completed-on')
                 status = request.form.get('status')
-                update_task(task=task, title=title, description=description, taken_on=taken_on, completed_on=completed_on, status=status)
+                update_task(task=task, title=title, description=description, taken_on=taken_on,
+                            completed_on=completed_on, status=status)
             else:
                 status = request.form.get('status')
                 task.update(status=TaskStatus(status))
             return redirect(url_for('tasks.index'))
         else:
             ...
+
+
+@TASKS_BLUEPRINT.route('/delete/<idx>', methods=['GET'])
+def delete(idx):
+    task = get_task_by_id(idx)
+    task.delete()
+    return redirect(url_for('tasks.index'))
