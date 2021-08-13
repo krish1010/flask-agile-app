@@ -36,23 +36,18 @@
 
     {{ task.status.value }}
     <br>
-    <label for="cars"><strong>Change Status:</strong></label>
-
-    <select name="status">
-        <option value="SUBSCRIBE">Subscribe</option>
-        <option value="COMPLETED">Completed</option>
-        {% if session.user_type == 'manager' %}
-            <option value="OPEN">Open</option>
-            <option value="APPROVED">Approved</option>
-        {% endif %}
-    </select>
+    <label for="taken-on"><strong>Taken on:</strong></label>
+    {{ task.taken_on }}
     <br>
-    {% if session.user_type == 'manager' %}
-        <button type="button" onclick="window.location.href='{{ url_for('tasks.update', idx=task.idx) }}'"
-                value="Update">Update
-        </button>
-        <br>
-    {% endif %}
+    <label for="completed-on"><strong>Complete on:</strong></label>
+    {{ task.completed_on }}
+    <br>
+
+    <button type="button" onclick="window.location.href='{{ url_for('tasks.update', idx=task.idx) }}'"
+            value="Update">Update
+    </button>
+    <br>
+
     <br>
     <br>
     <br>
