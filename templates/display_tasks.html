@@ -30,7 +30,7 @@
     <span>{{ task.description }}</span>
     <br>
     <label for="created-at"><strong>Created at:</strong></label>
-    {{ task.created_at }}
+    {{ task.created_at.strftime('%Y-%m-%d %H:%M:%S') }}
 
     <br><label for="status-l"><strong>Status:</strong></label>
 
@@ -41,10 +41,10 @@
         {{ task.user.username }}<br>
     {% endif %}
     <label for="taken-on"><strong>Taken on:</strong></label>
-    {{ task.taken_on }}
+    {{ task.taken_on.strftime('%Y-%m-%d') }}
     <br>
     <label for="completed-on"><strong>Complete on:</strong></label>
-    {{ task.completed_on }}
+    {{ task.completed_on.strftime('%Y-%m-%d') }}
     <br>
 
     <button type="button" onclick="window.location.href='{{ url_for('tasks.update', idx=task.idx) }}'"
