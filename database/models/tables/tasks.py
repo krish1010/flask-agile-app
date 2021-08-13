@@ -8,8 +8,7 @@ class Task(db.Model):
 
     idx = db.Column(db.String, primary_key=True)
 
-    manager_id = db.Column(db.String, db.ForeignKey('users.idx'))
-    employee_id = db.Column(db.String, db.ForeignKey('users.idx'))
+    user_id = db.Column(db.String, db.ForeignKey('users.idx'))
 
     title = db.Column(db.String)
     description = db.Column(db.String)
@@ -17,6 +16,7 @@ class Task(db.Model):
     taken_on = db.Column(db.DateTime)
     completed_on = db.Column(db.DateTime)
     status = db.Column(db.Enum(TaskStatus), default='OPEN')
+    user = db.relationship('User')
 
     @classmethod
     def get(cls, pk):
