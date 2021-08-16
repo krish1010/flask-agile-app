@@ -25,14 +25,14 @@
         <div class="mb-3">
             <label class="form-label" for="title"><strong>Title:</strong></label>
             <input class="form-control" type="text" placeholder="Enter Title" name="title" id="title"
-                   value="{% if task %}{{ task.title }}{% endif %}" required>
+                   value="{%- if task -%}{{ task.title }}{%- endif -%}" required>
         </div>
         {#Description#}
         <div class="mb-3">
             <label for="description" class="form-label"><strong>Description:</strong></label>
-            <textarea class="form-control" name="description" rows="3">{% if task %}{{ task.title }}{% endif %}</textarea>
+            <textarea class="form-control" name="description" rows="3">{%- if task -%}
+                {{ task.description }}{%- endif -%}</textarea>
         </div>
-
         {# Start date #}
         <div class="mb-3">
             <label for="start"><strong>Start date:</strong></label><br>
@@ -51,11 +51,13 @@
     <div class="mb-3">
         <label for="status"><strong>Change Status:</strong></label><br>
         <select name="status" class="form-select">
-            <option value="subscribed">Subscribe</option>
-            <option value="completed">Completed</option>
+            <option value="subscribed" {{ 'selected' if task and task.status.value == 'subscribed' }}>Subscribe</option>
+            <option value="completed" {{ 'selected' if task and task.status.value == 'completed' }}>Completed</option>
             {% if session.user_type == 'manager' %}
-                <option value="open" selected>Open</option>
-                <option value="approved">Approved</option>
+                <option value="open" {{ 'selected=selected' if (task and task.status.value == 'open')  or not task }}>
+                    Open
+                </option>
+                <option value="approved" {{ 'selected' if task and task.status.value == 'approved' }}>Approved</option>
             {% endif %}
         </select>
     </div>

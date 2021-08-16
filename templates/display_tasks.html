@@ -52,9 +52,11 @@
                         <label for="completed-on"><strong>Complete on:</strong></label>
                         {{ task.completed_on.strftime('%Y-%m-%d') }}
                         <br>
-                        <button type="button" class="btn-secondary"
-                                onclick="window.location.href='{{ url_for('tasks.update', idx=task.idx) }}'">Update
-                        </button>
+                        {% if session.user_type == 'manager' or task.status.value != 'subscribed' or session.username == task.user.username %}
+                            <button type="button" class="btn-secondary"
+                                    onclick="window.location.href='{{ url_for('tasks.update', idx=task.idx) }}'">Update
+                            </button>
+                        {% endif %}
                         {% if session.user_type == 'manager' %}
                             <button type="button" class="btn-danger"
                                     onclick="window.location.href='{{ url_for('tasks.delete', idx=task.idx) }}'">Delete
