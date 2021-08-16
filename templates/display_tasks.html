@@ -3,65 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <title>Tasks</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+          integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"
+            integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/static/tasks/display/display.css">
 </head>
 <body>
-{% if session.username %}
-    Hi, {{ session.username }}
-{% endif %}
-<br>
-<br>
+<nav class="navbar navbar-dark bg-dark">
+    <a class="navbar-brand">
+        {% if session.username %}
+            <h5 class="card-title">Hi, {{ session.username }}</h5>
+        {% endif %}</a>
+    <form action="{{ url_for('users.logout') }}" method="post">
+        <button type="submit" class="btn btn-danger">Logout</button>
+    </form>
+</nav>
+
 {% if session.user_type == 'manager' %}
     <form action="{{ url_for('tasks.create') }}">
-        <button type="submit">Create</button>
+        <button type="submit" class="btn btn-primary">Create</button>
     </form>
     <br>
 {% endif %}
-<form action="{{ url_for('users.logout') }}" method="post">
-    <button type="submit">Logout</button>
-</form>
-<br>
-<br>
-{% for task in all_tasks %}
 
-    <label for="title"><strong>Title:</strong></label>
-    <span>{{ task.title }}</span>
-    <br>
-    <label for="description"><strong>Description:</strong></label>
-    <span>{{ task.description }}</span>
-    <br>
-    <label for="created-at"><strong>Created at:</strong></label>
-    {{ task.created_at.strftime('%Y-%m-%d %H:%M:%S') }}
+<div class="container mx-auto mt-4">
+    <div class="row">
+        {% for task in all_tasks %}
+            <div class="col-md-4">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ task.title }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ task.status.value }}</h6>
+                        {% if task.status.value == 'subscribed' %}
+                            <label for="task-assigner"><strong>Assigned to:</strong></label>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ task.user.username }}</h6><br>
+                        {% endif %}
+                        <p class="card-text">{{ task.description }}</p>
+                        <label for="created-at"><strong>Created at:</strong></label>
+                        {{ task.created_at.strftime('%Y-%m-%d %H:%M:%S') }}<br>
+                        <label for="taken-on"><strong>Taken on:</strong></label>
+                        {{ task.taken_on.strftime('%Y-%m-%d') }}
+                        <br>
+                        <label for="completed-on"><strong>Complete on:</strong></label>
+                        {{ task.completed_on.strftime('%Y-%m-%d') }}
+                        <br>
+                        <button type="button" class="btn-secondary"
+                                onclick="window.location.href='{{ url_for('tasks.update', idx=task.idx) }}'">Update
+                        </button>
+                        {% if session.user_type == 'manager' %}
+                            <button type="button" class="btn-danger"
+                                    onclick="window.location.href='{{ url_for('tasks.delete', idx=task.idx) }}'">Delete
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
 
-    <br><label for="status-l"><strong>Status:</strong></label>
 
-    {{ task.status.value }}
-    <br>
-    {% if task.status.value == 'subscribed' %}
-        <label for="task-assigner"><strong>Assigned to:</strong></label>
-        {{ task.user.username }}<br>
-    {% endif %}
-    <label for="taken-on"><strong>Taken on:</strong></label>
-    {{ task.taken_on.strftime('%Y-%m-%d') }}
-    <br>
-    <label for="completed-on"><strong>Complete on:</strong></label>
-    {{ task.completed_on.strftime('%Y-%m-%d') }}
-    <br>
+    </div>
+</div>
 
-    <button type="button" onclick="window.location.href='{{ url_for('tasks.update', idx=task.idx) }}'"
-            value="Update">Update
-    </button>
-    <br>
-
-    <br>
-    {% if session.user_type == 'manager' %}
-        <button type="button" onclick="window.location.href='{{ url_for('tasks.delete', idx=task.idx) }}'"
-                value="Delete">Delete
-        </button>
-        <br>
-    {% endif %}
-    <br>
-    <br>
-
-{% endfor %}
 </body>
 </html>

@@ -3,34 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="/static/login/login.css">
 </head>
 <body>
-<form action="{{ url_for('users.login') }}" method="post">
-    <class
-    ="container">
-    <h1>Login</h1>
-    <hr>
-
-    <label for="email"><strong>Username</strong></label>
-    <input type="text" placeholder="Enter Username" name="username" id="username" required>
 
 
-    <label for="psw"><strong>Password</strong></label>
-    <input type="password" placeholder="Enter Password" name="psw" id="psw" required>
+<div class="wrapper fadeInDown">
+    <div id="formContent">
+        <form action="{{ url_for('users.login') }}" method="post">
+            <input type="text" id="login" class="fadeIn second" name="username" placeholder="username">
+            <input type="password" id="password" class="fadeIn third" name="psw" placeholder="password">
+            <input type="submit" class="fadeIn fourth" value="Log In">
+        </form>
 
-    <hr>
-    <button type="submit" class="registerbtn">Login</button>
+        <div id="formFooter">
+            <a class="underlineHover" href="{{ url_for('users.register_user') }}">New User? Register</a>
+        </div>
+
     </div>
-</form>
-<button><a href="{{ url_for('users.register_user') }}">Register</a></button>
-{% with messages = get_flashed_messages() %}
-    {% if messages %}
-        <ul class=flashes>
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-{% endwith %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class=flashes>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+</div>
+
 </body>
 </html>

@@ -3,57 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <title>Create task</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+          integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"
+            integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+            crossorigin="anonymous"></script>
 </head>
 <body>
+{% if source == 'tasks.update' %}
+    <h1>Update task</h1>
+{% else %}
+    <h1>Add task</h1>
+{% endif %}
+
 <form action="{{ url_for(source, idx=idx) }}" method="post">
-
-    {% if source == 'tasks.update' %}
-        <h1>Update task</h1>
-    {% else %}
-        <h1>Add task</h1>
-    {% endif %}
-    <hr>
+    {#Title#}
     {% if session.user_type =='manager' %}
-        <label for="title"><strong>Title:</strong></label>
-        <input type="text" placeholder="Enter Title" name="title" id="title" value="{% if task %} {{ task.title }} {% endif %}" required>
-        <br>
-        <label for="description"><strong>Description:</strong></label>
+        <div class="mb-3">
+            <label class="form-label" for="title"><strong>Title:</strong></label>
+            <input class="form-control" type="text" placeholder="Enter Title" name="title" id="title"
+                   value="{% if task %}{{ task.title }}{% endif %}" required>
+        </div>
+        {#Description#}
+        <div class="mb-3">
+            <label for="description" class="form-label"><strong>Description:</strong></label>
+            <textarea class="form-control" name="description" rows="3">{% if task %}{{ task.title }}{% endif %}</textarea>
+        </div>
 
-        <textarea id="description" name="description"  rows="4" cols="50">{% if task %}{{ task.title }}{% endif %}</textarea>
-        <br>
-        <label for="start"><strong>Start date:</strong></label>
-        <input type="date" id="taken-on" name="taken-on" value="{% if task %}{{ task.completed_on.strftime('%Y-%m-%d') }}{% endif %}" required>
-
-        <br>
-        <br>
-        <label for="start"><strong>End date:</strong></label>
-
-        <input type="date" id="completed-on" name="completed-on" value="{% if task %}{{ task.completed_on.strftime('%Y-%m-%d') }}{% endif %}" required>
-
-        <br>
+        {# Start date #}
+        <div class="mb-3">
+            <label for="start"><strong>Start date:</strong></label><br>
+            <input type="date" id="taken-on" name="taken-on"
+                   value="{% if task %}{{ task.taken_on.strftime('%Y-%m-%d') }}{% endif %}" required>
+        </div>
+        {# End date #}
+        <div class="mb-3">
+            <label for="start"><strong>End date:</strong></label><br>
+            <input type="date" id="completed-on" name="completed-on"
+                   value="{% if task %}{{ task.completed_on.strftime('%Y-%m-%d') }}{% endif %}" required>
+        </div>
     {% endif %}
 
-    <label for="status"><strong>Change Status:</strong></label>
-
-    <select name="status">
-        <option value="subscribed">Subscribe</option>
-        <option value="completed">Completed</option>
-        {% if session.user_type == 'manager' %}
-            <option value="open">Open</option>
-            <option value="approved">Approved</option>
-        {% endif %}
-    </select>
-
-
-    <hr>
-    {% if source == 'tasks.update' %}
-        <button type="submit">Update</button>
-    {% else %}
-        <button type="submit">Add</button>
-    {% endif %}
+    {# Status #}
+    <div class="mb-3">
+        <label for="status"><strong>Change Status:</strong></label><br>
+        <select name="status" class="form-select">
+            <option value="subscribed">Subscribe</option>
+            <option value="completed">Completed</option>
+            {% if session.user_type == 'manager' %}
+                <option value="open" selected>Open</option>
+                <option value="approved">Approved</option>
+            {% endif %}
+        </select>
     </div>
+    {% if source == 'tasks.update' %}
+        <button type="submit" class="btn btn-primary">Update</button>
+    {% else %}
+        <button type="submit" class="btn btn-primary">Add</button>
+    {% endif %}
+
 </form>
-<button><a href="{{ url_for('tasks.index') }}">All Tasks</a></button>
+<button type="button" class="btn btn-dark"><a href="{{ url_for('tasks.index') }}">All Tasks</a></button>
 
 </body>
 </html>
