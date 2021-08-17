@@ -39,7 +39,7 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ task.title }}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">{{ task.status.value }}</h6>
-                        {% if task.status.value == 'subscribed' %}
+                        {% if task.status.value in ('subscribed', 'completed', 'approved') %}
                             <label for="task-assigner"><strong>Assigned to:</strong></label>
                             <h6 class="card-subtitle mb-2 text-muted">{{ task.user.username }}</h6><br>
                         {% endif %}
@@ -52,7 +52,7 @@
                         <label for="completed-on"><strong>Complete on:</strong></label>
                         {{ task.completed_on.strftime('%Y-%m-%d') }}
                         <br>
-                        {% if session.user_type == 'manager' or task.status.value != 'subscribed' or session.username == task.user.username %}
+                        {% if session.user_type == 'manager' or (task.status.value in ('open')) or (session.username == task.user.username and (task.status.value in ('subscribed', 'completed'))) %}
                             <button type="button" class="btn-secondary"
                                     onclick="window.location.href='{{ url_for('tasks.update', idx=task.idx) }}'">Update
                             </button>
