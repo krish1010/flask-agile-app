@@ -51,13 +51,18 @@
     <div class="mb-3">
         <label for="status"><strong>Change Status:</strong></label><br>
         <select name="status" class="form-select">
-            <option value="subscribed" {{ 'selected' if task and task.status.value == 'subscribed' }}>Subscribe</option>
-            <option value="completed" {{ 'selected' if task and task.status.value == 'completed' }}>Completed</option>
             {% if session.user_type == 'manager' %}
                 <option value="open" {{ 'selected=selected' if (task and task.status.value == 'open')  or not task }}>
                     Open
                 </option>
+                {% if source == 'tasks.update' and task.status.value == 'completed'%}
                 <option value="approved" {{ 'selected' if task and task.status.value == 'approved' }}>Approved</option>
+                {% endif %}
+            {% else %}
+                <option value="subscribed" {{ 'selected' if task and task.status.value == 'subscribed' }}>Subscribe</option>
+                {% if task.status.value == 'subscribed'%}
+                    <option value="completed" {{ 'selected' if task and task.status.value == 'completed' }}>Completed</option>
+                {% endif %}
             {% endif %}
         </select>
     </div>

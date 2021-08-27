@@ -23,25 +23,31 @@
         <button type="submit" class="btn btn-danger">Logout</button>
     </form>
 </nav>
-
+{% if source == 'history' %}
+<button type="button" class="btn btn-dark"><a href="{{ url_for('tasks.index') }}">All Tasks</a></button>
+{% else %}
 {% if session.user_type == 'manager' %}
     <form action="{{ url_for('tasks.create') }}">
         <button type="submit" class="btn btn-primary">Create</button>
     </form>
     <br>
 {% endif %}
+    <form action="{{ url_for('tasks.history') }}" method="get">
+        <button type="submit" class="btn btn-primary">History</button>
+    </form>
+{% endif %}
 
 <div class="container mx-auto mt-4">
     <div class="row">
         {% for task in all_tasks %}
             <div class="col-md-4">
-                <div class="card" style="width: 18rem;">
+                <div class={{ task.status.value }} style="width: 18rem;">
                     <div class="card-body">
                         <h5 class="card-title">{{ task.title }}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">{{ task.status.value }}</h6>
-                        {% if task.status.value in ('subscribed', 'completed', 'approved') %}
+                        {% if task.status.value in ('subscribed', 'completed') %}
                             <label for="task-assigner"><strong>Assigned to:</strong></label>
-                            <h6 class="card-subtitle mb-2 text-muted">{{ task.user.username }}</h6><br>
+                            <h6 class="card-subtitle mb-2 text-muted">{{ task.developer_username }}</h6><br>
                         {% endif %}
                         <p class="card-text">{{ task.description }}</p>
                         <label for="created-at"><strong>Created at:</strong></label>
@@ -52,24 +58,22 @@
                         <label for="completed-on"><strong>Complete on:</strong></label>
                         {{ task.completed_on.strftime('%Y-%m-%d') }}
                         <br>
-                        {% if session.user_type == 'manager' or (task.status.value in ('open')) or (session.username == task.user.username and (task.status.value in ('subscribed', 'completed'))) %}
-                            <button type="button" class="btn-secondary"
-                                    onclick="window.location.href='{{ url_for('tasks.update', idx=task.idx) }}'">Update
-                            </button>
-                        {% endif %}
-                        {% if session.user_type == 'manager' %}
-                            <button type="button" class="btn-danger"
-                                    onclick="window.location.href='{{ url_for('tasks.delete', idx=task.idx) }}'">Delete
-                            </button>
-                        {% endif %}
+                        {% if source != 'history' %}
+                            {% if session.user_idx in (task.created_by_user_id, task.developer_user_id) or (task.status.value == 'open' and session.user_type != 'manager') %}
+                                <button type="button" class="btn-secondary"
+                                        onclick="window.location.href='{{ url_for('tasks.update', idx=task.idx) }}'">Update
+                                </button>
+                            {% endif %}
+                            {% if session.user_idx == task.created_by_user_id %}
+                                <button type="button" class="btn-danger"
+                                        onclick="window.location.href='{{ url_for('tasks.delete', idx=task.idx) }}'">Delete
+                                </button>
+                            {% endif %}
+                    {% endif %}
                     </div>
                 </div>
             </div>
         {% endfor %}
-
-
     </div>
-</div>
-
 </body>
 </html>
