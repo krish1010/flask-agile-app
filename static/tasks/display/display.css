@@ -14,6 +14,34 @@ body {
     margin-bottom: 2rem;
 }
 
+.subscribed {
+    background: #222;
+    border: 1px solid yellow;
+    color: rgba(250, 250, 250, 0.8);
+    margin-bottom: 2rem;
+}
+
+.open {
+    background: #222;
+    border: 1px solid red;
+    color: rgba(250, 250, 250, 0.8);
+    margin-bottom: 2rem;
+}
+
+.completed {
+    background: #222;
+    border: 1px solid green;
+    color: rgba(250, 250, 250, 0.8);
+    margin-bottom: 2rem;
+}
+
+.approved {
+    background: #222;
+    border: 1px solid white;
+    color: rgba(250, 250, 250, 0.8);
+    margin-bottom: 2rem;
+}
+
 .btn {
     border: 5px solid;
     border-image-slice: 1;
