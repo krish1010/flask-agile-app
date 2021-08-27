@@ -1,6 +1,7 @@
 from database.db import db
 from database.models.enums.task_status import TaskStatus
 from datetime import datetime
+from .users import User
 
 
 class Task(db.Model):
@@ -8,7 +9,8 @@ class Task(db.Model):
 
     idx = db.Column(db.String, primary_key=True)
 
-    user_id = db.Column(db.String, db.ForeignKey('users.idx'))
+    created_by_user_id = db.Column(db.String, db.ForeignKey('users.idx'))
+    developer_user_id = db.Column(db.String, db.ForeignKey('users.idx'))
 
     title = db.Column(db.String)
     description = db.Column(db.String)
@@ -16,7 +18,6 @@ class Task(db.Model):
     taken_on = db.Column(db.DateTime)
     completed_on = db.Column(db.DateTime)
     status = db.Column(db.Enum(TaskStatus), default='OPEN')
-    user = db.relationship('User')
 
     @classmethod
     def get(cls, pk):
@@ -35,6 +36,20 @@ class Task(db.Model):
     @classmethod
     def get_all_tasks(cls):
         return cls.query.all()
+
+    @property
+    def created_by_username(self):
+        user = User.get(pk=self.created_by_user_id)
+        if user:
+            return user.username
+        return None
+
+    @property
+    def developer_username(self):
+        user = User.get(pk=self.developer_user_id)
+        if user:
+            return user.username
+        return None
 
     def update(self, commit=True, **kwargs):
         for attr, value in kwargs.items():
